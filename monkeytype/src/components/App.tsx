@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Chart from './Chart'
+import Github from './Github'
 export default function App() {
   const [count, setCount] = useState(10)
   const [havePunctuation,setHavePunctuation] = useState(false)
@@ -45,8 +46,8 @@ export default function App() {
     let score = 0
     const trimmedInput = (userInputRef.current || '').trim()
     if(trimmedInput === '') return 0
-    const userInp: string[] = trimmedInput.split(/\s+/).filter(Boolean)
-    const ansInput: string[] = promptTxt.split(/\s+/).filter(Boolean)
+    const userInp: string[] = trimmedInput.split(' ')
+    const ansInput: string[] = promptTxt.split(' ')
     const len = Math.min(userInp.length, ansInput.length)
     for(let i = 0; i < len; i++){
       if(ansInput[i] === userInp[i]){
@@ -114,6 +115,7 @@ export default function App() {
   },[userInput])
   return (
     <div>
+      <Github />
       {page === 'test' && (
         <div className={`${textColor} min-h-screen bg-slate-50 p-6`}>
         <h1 className='text-xl text-center'>TYpE</h1>
@@ -122,7 +124,7 @@ export default function App() {
     <h1 className='text-sm text-slate-500 text-center'>Time (1-60seconds)</h1>
     <input type='number' value={time} onChange={(e) => {
       setTime(parseInt(e.target.value) || 0)
-      setRemainingTime(parseInt(e.target.value)||0)
+      setRemainingTime(parseInt(e.target.value) ||0)
       }} className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center mt-1 block w-full rounded-md border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`} required placeholder='1-60'/>
     </div>
     <div className={`bg-white ${textColor} p-2 rounded-2xl shadow flex flex-col`}>
@@ -138,7 +140,9 @@ export default function App() {
       <input
         type="checkbox"
         checked={havePunctuation}
-        onChange={(e) => setHavePunctuation(e.target.checked)}
+        onChange={async (e) => {setHavePunctuation(e.target.checked)
+          await generateWords(count, e.target.checked, haveNumbers)
+        }}
         className="sr-only peer"
         aria-label="Include punctuation"
       />
@@ -156,7 +160,9 @@ export default function App() {
       <input
         type="checkbox"
         checked={haveNumbers}
-        onChange={(e) => setHaveNumbers(e.target.checked)}
+        onChange={async (e) => {setHaveNumbers(e.target.checked)
+          await generateWords(count, havePunctuation, e.target.checked)
+        }}
         className="sr-only peer"
         aria-label="Include numbers"
       />
@@ -174,7 +180,7 @@ export default function App() {
   <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
 </svg></button>
       <h2 className='text-xl text-center'>{remainingTime}s remaining. {start === false? 'Type to start!':''}</h2>
-      <h1 className='text-xl'>{promptTxt.split(' ').length !== count? 'Generating...' : promptTxt}</h1>
+      <h1 className='text-xl'>{promptTxt.split(' ').length < count? 'Generating...' : promptTxt}</h1>
     </div>
     <div className={`p-6 ${textColor}`}>
       <textarea value={userInput} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>{ 
