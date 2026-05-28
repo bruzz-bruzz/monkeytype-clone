@@ -163,7 +163,7 @@ export default function App() {
         type="checkbox"
         checked={havePunctuation}
         onChange={async (e) => {setHavePunctuation(e.target.checked)
-          await generateWords(count, e.target.checked, haveNumbers)
+          generateWords(count, e.target.checked, haveNumbers)
         }}
         className="sr-only peer"
         aria-label="Include punctuation"
@@ -183,7 +183,7 @@ export default function App() {
         type="checkbox"
         checked={haveNumbers}
         onChange={async (e) => {setHaveNumbers(e.target.checked)
-          await generateWords(count, havePunctuation, e.target.checked)
+          generateWords(count, havePunctuation, e.target.checked)
         }}
         className="sr-only peer"
         aria-label="Include numbers"
