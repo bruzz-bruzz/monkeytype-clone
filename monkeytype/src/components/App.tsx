@@ -54,7 +54,7 @@ export default function App() {
         score++
       }
     }
-    const wpm = Number(((score / time) * 60).toFixed(0))
+    const wpm = Number(((userInp.length / time) * 60).toFixed(0))
     setUserWPM(wpm)
     setWordsTyped(userInp.length)
     setCorrect([score, userInp.length])
