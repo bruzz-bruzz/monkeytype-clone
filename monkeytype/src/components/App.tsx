@@ -20,6 +20,7 @@ export default function App() {
   const [wordsTyped,setWordsTyped] = useState<Number>(0)
   const [correct,setCorrect] = useState<any>([0,0])
   async function generateWords(amount:number,havePunctuation:boolean,haveNumbers:boolean){
+    setPrompt('')
     let tmp:string[] = []
     for(let i = 0; i < amount; i++){
       const res = await fetch(`https://random-words-api.kushcreates.com/api?language=en&words=${count}`)
@@ -126,7 +127,10 @@ export default function App() {
     </div>
     <div className={`bg-white ${textColor} p-2 rounded-2xl shadow flex flex-col`}>
     <h1 className='text-sm text-slate-500 text-center'>Word count(1-100)</h1>
-    <input type='number' value={count} onChange={(e) => setCount(parseInt(e.target.value) || 0)} className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center mt-1 block w-full rounded-md border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`} required placeholder='1-100'/>
+    <input type='number' value={count} onChange={(e) => {
+      setCount(parseInt(e.target.value) || 0)
+      generateWords(parseInt(e.target.value) || 0, havePunctuation, haveNumbers)
+    }} className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-center mt-1 block w-full rounded-md border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400`} required placeholder='1-100'/>
     </div>
     <div className={`bg-white ${textColor} p-4 rounded-2xl shadow flex flex-col`}>
     <h1 className='text-sm text-slate-500 text-center mb-2'>Include punctuation</h1>
@@ -170,7 +174,7 @@ export default function App() {
   <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
 </svg></button>
       <h2 className='text-xl text-center'>{remainingTime}s remaining. {start === false? 'Type to start!':''}</h2>
-      <h1 className='text-xl'>{promptTxt === ''? 'Generating...' : promptTxt}</h1>
+      <h1 className='text-xl'>{promptTxt.split(' ').length !== count? 'Generating...' : promptTxt}</h1>
     </div>
     <div className={`p-6 ${textColor}`}>
       <textarea value={userInput} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>{ 
