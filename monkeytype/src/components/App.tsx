@@ -106,6 +106,9 @@ export default function App() {
   }
   useEffect(()=>{
     generateWords(count,havePunctuation,haveNumbers)
+    setNumbers(numbers)
+    setPunctuation(punctuation)
+    setTextColor(textColor)
   },[])
   useEffect(()=>{
     userInputRef.current = userInput

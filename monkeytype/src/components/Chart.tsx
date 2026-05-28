@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import './App.css'
 import { Line } from 'react-chartjs-2'
 import {
@@ -11,8 +11,9 @@ import {
   Tooltip,
   Legend,
   Filler,
-  TimeScale
+  TimeScale, 
 } from 'chart.js'
+import type {ChartOptions} from 'chart.js'
 ChartJS.register(Filler,CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, TimeScale)
 
 export default function Chart({data}: any){
@@ -60,7 +61,7 @@ export default function Chart({data}: any){
         }
     },[formatted])
 
-    const options = {
+    const options: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -82,11 +83,12 @@ export default function Chart({data}: any){
                 ticks: { color: '#64748b', autoSkip: false, maxRotation: 0, minRotation: 0 }
             },
             y: {
+                beginAtZero:true,
                 grid: { color: 'rgba(15,23,42,0.06)' },
-                ticks: { color: '#64748b', beginAtZero: true }
+                ticks: { color: '#64748b'}
             }
         },
-        animation: { duration: 700, easing: 'easeOutQuart' }
+        animation: { duration: 700, easing: 'easeOutQuart' as const,}
     }
 
     return (
