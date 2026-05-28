@@ -23,6 +23,7 @@ export default function App() {
     for(let i = 0; i < amount; i++){
       const res = await fetch(`https://random-words-api.kushcreates.com/api?language=en&words=${count}`)
       const data = await res.json()
+      console.log(data)
       for(let x = 0; x < data.length; x++){
         if(havePunctuation === true){
           const randomPunctuation = punctuation[Math.floor(Math.random() * punctuation.length)]
@@ -32,7 +33,9 @@ export default function App() {
           const randomNumber = numbers[Math.floor(Math.random() * numbers.length)]
           data[x].word = data[x].word + ' ' + randomNumber
         }
-        tmp.push(data[x].word)
+        if(tmp.length < amount){
+          tmp.push(data[x].word)
+        }
       }
     }
     setPrompt(tmp.join(' '))
