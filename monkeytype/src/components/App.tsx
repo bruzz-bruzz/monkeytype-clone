@@ -18,6 +18,7 @@ export default function App() {
   const [userWPM,setUserWPM] = useState<Number>(0)
   const [chartData,setChartData] = useState<any>([[],[]])
   const [wordsTyped,setWordsTyped] = useState<Number>(0)
+  const [correct,setCorrect] = useState<any>([0,0])
   async function generateWords(amount:number,havePunctuation:boolean,haveNumbers:boolean){
     let tmp:string[] = []
     for(let i = 0; i < amount; i++){
@@ -54,6 +55,7 @@ export default function App() {
     const wpm = Number(((score / time) * 60).toFixed(0))
     setUserWPM(wpm)
     setWordsTyped(userInp.length)
+    setCorrect([score, userInp.length])
     return score
   }
   function countdown(){
@@ -76,16 +78,12 @@ export default function App() {
     setRemainingTime(time)
     generateWords(count,havePunctuation,haveNumbers)
   }
-  function getWordsTyped(){
-    const trimmed = (userInputRef.current || '').trim()
-    if(trimmed === '') return 0
-    return trimmed.split(/\s+/).filter(Boolean).length
-  }
-  function changeChartData(timestamp:Number,wordsTyped:Number){
+  function changeChartData(timestamp:Number){
+    const inp = userInputRef.current.split(' ')
     const x = time - Number(timestamp)
     setChartData((prev:any) => {
       if(prev[0].includes(x)) return prev
-      return [[...prev[0], x],[...prev[1], wordsTyped]]
+      return [[...prev[0], x],[...prev[1], Number(((inp.length / time) * 60).toFixed(0))]]
     })
   }
   function returnChart(){
@@ -93,7 +91,7 @@ export default function App() {
       labels:[],
       datasets:[
         {
-          label:"Words Typed",
+          label:"WPM",
           data:[],
           borderColor:'rgb(75,192,75)',
           fill:true
@@ -178,7 +176,7 @@ export default function App() {
       <textarea value={userInput} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>{ 
         const val = e.target.value
         setUserInput(val)
-        changeChartData(remainingTime,getWordsTyped())
+        changeChartData(remainingTime)
         if(!start){
           countdown()
           setStart(true)
@@ -199,12 +197,12 @@ export default function App() {
               <div className="mt-2 text-xl font-semibold">{String(wordsTyped)} words</div>
             </div>
             <div className='bg-white p-4 rounded-2xl shadow flex flex-col'>
-              <div className="text-sm text-slate-500">Test duration</div>
-              <div className="mt-2 text-xl font-semibold">{String(time)} seconds</div>
+              <div className="text-sm text-slate-500">Accuracy</div>
+              <div className="mt-2 text-xl font-semibold">{String(Math.round((correct[0] / correct[1]) * 100))}%<br></br>{correct[1] - correct[0]} wrong</div>
             </div>
             <div className='bg-white p-4 rounded-2xl shadow flex flex-col'>
               <div className="text-sm text-slate-500">Test settings</div>
-              <div className="mt-2 text-xl font-semibold">{havePunctuation === true? 'Punctuation✅':'Punctuation❌'}<br></br>{haveNumbers === true? "Numbers✅":'Numbers❌'}</div>
+              <div className="mt-2 text-xl font-semibold">{havePunctuation === true? 'Punctuation✅':'Punctuation❌'}<br></br>{haveNumbers === true? "Numbers✅":'Numbers❌'}<br></br>{String(time)} seconds</div>
             </div>
           </section>
           <div className="mt-6 h-auto rounded-lg flex items-center justify-center text-slate-400">
