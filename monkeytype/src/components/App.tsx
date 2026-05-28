@@ -70,6 +70,7 @@ export default function App() {
         setStart(false)
       }
       timeLeft--;
+      changeChartData(timeLeft)
       setRemainingTime(timeLeft)
     },1000)
   }
@@ -186,7 +187,6 @@ export default function App() {
       <textarea value={userInput} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>{ 
         const val = e.target.value
         setUserInput(val)
-        changeChartData(remainingTime)
         if(!start){
           countdown()
           setStart(true)
