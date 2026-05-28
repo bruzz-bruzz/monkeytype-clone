@@ -23,7 +23,6 @@ export default function App() {
     for(let i = 0; i < amount; i++){
       const res = await fetch(`https://random-words-api.kushcreates.com/api?language=en&words=${count}`)
       const data = await res.json()
-      console.log(data)
       for(let x = 0; x < data.length; x++){
         if(havePunctuation === true){
           const randomPunctuation = punctuation[Math.floor(Math.random() * punctuation.length)]
@@ -52,9 +51,7 @@ export default function App() {
         score++
       }
     }
-    console.log(score, userInp, ansInput)
     const wpm = Number(((score / time) * 60).toFixed(0))
-    console.log(wpm)
     setUserWPM(wpm)
     setWordsTyped(userInp.length)
     return score
