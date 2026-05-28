@@ -85,7 +85,7 @@ export default function App() {
     const x = time - Number(timestamp)
     setChartData((prev:any) => {
       if(prev[0].includes(x)) return prev
-      return [[...prev[0], x],[...prev[1], Number(((inp.length / time) * 60).toFixed(0))]]
+      return [[...prev[0], x],[...prev[1], Number(((inp.length / Number(timestamp)) * 60).toFixed(0))]]
     })
   }
   function returnChart(){
