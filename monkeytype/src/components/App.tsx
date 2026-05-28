@@ -70,7 +70,9 @@ export default function App() {
         setStart(false)
       }
       timeLeft--;
-      changeChartData(timeLeft)
+      if(timeLeft != 0){
+        changeChartData(timeLeft)
+      }
       setRemainingTime(timeLeft)
     },1000)
   }
