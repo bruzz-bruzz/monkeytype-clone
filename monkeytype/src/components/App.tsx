@@ -93,22 +93,14 @@ export default function App() {
   }
   function validatePrompt(hasNumbers:boolean,hasPunctuation:boolean){
     let res = true
-    if(hasNumbers === true){
-      for(let i = 0; i < numbers.length; i++){
-        if(promptTxt.includes(numbers[i])){
-          res = true
-          break
-        }
+    for(let i = 0; i < promptTxt.length; i++){
+      if(hasNumbers === false && numbers.includes(promptTxt[i])){
         res = false
+        break
       }
-    }
-    if(hasPunctuation === true){
-      for(let i = 0; i < punctuation.length; i++){
-        if(promptTxt.includes(punctuation[i])){
-          res = true
-          break
-        }
+      if(hasPunctuation === false && punctuation.includes(promptTxt[i])){
         res = false
+        break
       }
     }
     return res
